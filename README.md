@@ -21,3 +21,6 @@ Start the project:
 ```
 npm run start
 ```
+
+### Contributors
+This project is developed and maintaned by Luca Guida, Chiara Relandini and Arian Rezai Tabrizi. 
