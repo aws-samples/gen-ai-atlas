@@ -23,4 +23,4 @@ npm run start
 ```
 
 ### Contributors
-This project is developed and maintaned by Luca Guida, Chiara Relandini and Arian Rezai Tabrizi. 
+This project is developed and maintaned by Luca Guida ([GitHub](https://github.com/l-guida), [Linkedin](https://www.linkedin.com/in/lucaguida/)), Chiara Relandini ([GitHub](https://github.com/chiararelandini), [Linkedin](https://www.linkedin.com/in/chiara-relandini-aa243a148/)) and Arian Rezai Tabrizi ([GitHub](https://github.com/arianrezai), [Linkedin](https://www.linkedin.com/in/arianrezai/)). 
