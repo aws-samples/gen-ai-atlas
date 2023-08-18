@@ -42,11 +42,10 @@ const useCaseMapping = {
   'question-answering': 'Question Answering',
   'sentiment-analysis': 'Sentiment Analysis',
   'image-generation': 'Image Generation',
-  'image-to-text-classification': 'Image-to-Text & Image Classification',
+  'image-to-text': 'Image-to-Text',
   'personalization': 'Personalization',
   'fine-tuning': 'Model Fine Tuning',
   'classification-NER': 'Named Entity Recognition & Classification',
-  'data-labeling': 'Data Labeling',
   'best-practices': 'Generative AI Best Practices'
 }
 
@@ -112,12 +111,11 @@ const useCasesOptions = [
   { label: 'question-answering', value: '6' },
   { label: 'sentiment-analysis', value: '7' },
   { label: 'image-generation', value: '8' },
-  { label: 'image-to-text-classification', value: '9' },
+  { label: 'image-to-text', value: '9' },
   { label: 'personalization', value: '10' },
   { label: 'fine-tuning', value: '11' },
   { label: 'classification-NER', value: '12' },
-  { label: 'data-labeling', value: '13' },
-  { label: 'best-practices', value: '14'}
+  { label: 'best-practices', value: '13'}
 ]
 
 export const prepareUseCasesOptions = (defaultUseCase) => [defaultUseCase, ...useCasesOptions.map(option => ({ ...option, rawLabel: option.label, label: mapUseCaseName(option.label)}))]
