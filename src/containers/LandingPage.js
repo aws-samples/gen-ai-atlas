@@ -5,20 +5,20 @@ import Header from "@cloudscape-design/components/header";
 import Pagination from "@cloudscape-design/components/pagination";
 import CollectionPreferences from "@cloudscape-design/components/collection-preferences";
 import Link from "@cloudscape-design/components/link";
-
 import { useCollection } from '@cloudscape-design/collection-hooks';
-
 import {
-    AppLayout, ColumnLayout, FormField, Input, Select, SpaceBetween,
+    AppLayout, ColumnLayout, ContentLayout, FormField, Input, Select, SpaceBetween,
 } from "@cloudscape-design/components";
 
 
 import Navigation from "../components/Navigation";
 import { appLayoutLabels} from '../components/Labels';
-import { SEARCHABLE_COLUMNS, aggregateUseCases, getNumberOfVisibleItems, getTextFilterCounterText, includesUseCase, mapContentTypeName, mapResourceFields, paginationAriaLabels, prepareContentTypesOptions, prepareUseCasesOptions, visibleContent, visiblePreferencesOptions } from '../components/utils'
+import { aggregateUseCases, getNumberOfVisibleItems, getTextFilterCounterText, includesUseCase, mapContentTypeName, mapResourceFields, paginationAriaLabels, prepareContentTypesOptions, prepareUseCasesOptions } from '../components/utils'
 import { CardsEmptyState, CardsNoMatchState } from '../components/Cards';
+import { SEARCHABLE_COLUMNS_CARDS, cardsVisibleContent, cardsVisiblePreferencesOptions } from '../components/constants';
 
 import Papa from "papaparse";
+import { HomeBreadcrumbs } from '../components/Breadcrumbs';
 const csvFile = process.env.PUBLIC_URL + '/atlas.csv'
 const rectangle = process.env.PUBLIC_URL + '/rectangle_grey.png'
 const repoImage = process.env.PUBLIC_URL + '/image.png'
@@ -37,10 +37,10 @@ function matchesContentType(item, selectedContentType) {
   return selectedContentType === defaultContentType || item.type === selectedContentType.rawLabel
 }
 
-const Content = () => {
+const CardsContent = () => {
     const [ loading, setLoading ] = React.useState(false);
     const [ selectedItems, setSelectedItems ] = React.useState([{ }]);
-    const [ preferences, setPreferences ] = React.useState({ pageSize: 12, visibleContent })
+    const [ preferences, setPreferences ] = React.useState({ pageSize: 12, visibleContent: cardsVisibleContent })
     const [ resources, setResources ] = React.useState([])
     const [ useCase, setUseCase ] = React.useState(defaultUseCase);
     const [ contentType, setContentType ] = React.useState(defaultContentType);
@@ -98,7 +98,7 @@ const Content = () => {
               }
               const filteringTextLowerCase = filteringText.toLowerCase();
       
-              return SEARCHABLE_COLUMNS.map(key => item[key]).some(
+              return SEARCHABLE_COLUMNS_CARDS.map(key => item[key]).some(
                 value => typeof value === 'string' && value.toLowerCase().indexOf(filteringTextLowerCase) > -1
               );
             },
@@ -278,7 +278,7 @@ const Content = () => {
                 options: [
                   {
                     label: "Main distribution properties",
-                    options: visiblePreferencesOptions
+                    options: cardsVisiblePreferencesOptions
                   }
                 ]
               }}
@@ -288,18 +288,37 @@ const Content = () => {
       );
 }
 
+
+const Content = () => {
+  return (
+      <ContentLayout
+          header={
+              <Header
+              variant="h1">
+              Explore and Search
+            </Header>
+          }
+        >
+          <SpaceBetween size="l">
+              <CardsContent />
+          </SpaceBetween>
+      </ContentLayout>
+  )
+}
+
 export function LandingPage(props) {
 
-    return (
-        <div>
-            <AppLayout
-                content={<Content />}
-                navigation={<Navigation setNavigationOpen={props.setNavigationOpen}/>}
-                navigationOpen={props.navigationOpen}
-                onNavigationChange={({ detail }) => props.setNavigationOpen(detail.open)}
-                toolsHide={true}
-                ariaLabels={appLayoutLabels}
-            />
-        </div>
-    );
+  return (
+      <div>
+          <AppLayout
+              content={<Content />}
+              navigation={<Navigation setNavigationOpen={props.setNavigationOpen}/>}
+              navigationOpen={props.navigationOpen}
+              onNavigationChange={({ detail }) => props.setNavigationOpen(detail.open)}
+              toolsHide={true}
+              ariaLabels={appLayoutLabels}
+              breadcrumbs={<HomeBreadcrumbs />}
+          />
+      </div>
+  );
 }
