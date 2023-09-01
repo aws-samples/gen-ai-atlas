@@ -19,7 +19,9 @@ export const useCaseMapping = {
     'personalization': 'Personalization',
     'fine-tuning': 'Model Fine Tuning',
     'classification-NER': 'Named Entity Recognition & Classification',
-    'best-practices': 'Generative AI Best Practices'
+    'best-practices': 'Generative AI Best Practices',
+    'vector-database': 'Vector Database',
+    'RAG': 'Retrieval Augmented Generation'
   }
 
 export const useCasesOptions = [
@@ -36,15 +38,18 @@ export const useCasesOptions = [
     { label: 'personalization', value: '10' },
     { label: 'fine-tuning', value: '11' },
     { label: 'classification-NER', value: '12' },
-    { label: 'best-practices', value: '13'}
+    { label: 'best-practices', value: '13'},
+    { label: 'vector-database', value: '14' },
+    { label: 'RAG', value: '15'}
   ]
 
 export const contentTypesOptions = [
   // this should better be dynamic
   { label: 'blog', value: '1' },
   { label: 'workshop', value: '2' },
-  { label: 'video', value: '3' },
-  { label: 'jumpstart', value: '4' },
+  { label: 'jumpstart', value: '3' },
+  { label: 'solution', value: '4' },
+  { label: 'video', value: '5' }
 ]
 
 export const SEARCHABLE_COLUMNS_CARDS = [ 'name', 'url', 'useCases', 'type', 'update', 'imageUrl' ]

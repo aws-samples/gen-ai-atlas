@@ -68,7 +68,7 @@ export const mapResourceFields = async (resource) => {
   if(!resource || !resource["Content title"]){ return {} }
 
   const imageUrl = resource["Image URL"] === "Notebook icon TBD" ? null  : resource["Image URL"]
-  const imgDim =  getImgDim(imageUrl)
+  const imgDim =  await getImgDim(imageUrl)
 
   return {
     name: resource["Content title"],
@@ -100,4 +100,14 @@ export const getNumberOfVisibleItems = (filteredItemsCount, currentPage, totalPa
   return filteredItemsCount
   ? `(${filteredItemsCount}/${totalResources})`
   : `(${totalResources})`
+}
+
+export const getUseCaseFromQueryParamIfExists = (param, defaultUseCase) => {
+  const selectUseCaseOptions = prepareUseCasesOptions(defaultUseCase)
+  return selectUseCaseOptions.filter(option => option.rawLabel === param)?.[0] || defaultUseCase
+}
+
+export const getContentTypeFromQueryParamIfExists = (param, defaultContentType) => {
+  const selectContentTypesOptions = prepareContentTypesOptions(defaultContentType);
+  return selectContentTypesOptions.filter(option => option.rawLabel === param)?.[0] || defaultContentType
 }
