@@ -105,3 +105,7 @@ Retrieval-Augmented Generation | Build On Generative AI,https://www.twitch.tv/vi
 Stable Diffusion on Trainium | Build On Generative AI,https://www.twitch.tv/videos/1887068591?collection=HQsG0_M5Pxdyfg,,image-generation,,,,,,,,,,video,08/01/2023
 TensorBoard and Sagemaker | Build On Generative AI,https://www.twitch.tv/videos/1887068690?collection=HQsG0_M5Pxdyfg,,best-practices,,,,,,,,,,video,08/01/2023
 "Let's look at Llama2, Falcon and more! | Build On Generative AI",https://www.twitch.tv/videos/1900520389?collection=HQsG0_M5Pxdyfg,,text-generation,question-answering,best-practices,,,,,,,,video,08/16/2023
+Generative AI use cases with Aurora PostgreSQL,https://catalog.workshops.aws/pgvector/en-US,,vector-database,RAG,sentiment-analysis,chat,,,,,,,workshop,2023
+Generative AI workshop for Public Sector,https://catalog.us-east-1.prod.workshops.aws/workshops/17289632-a611-4e70-a54c-3e3f1c0b4307/en-US,,fine-tuning,image-generation,,,,,,,,,workshop,2023
+Generative AI Large Language Model Workshop for HCLS,https://catalog.us-east-1.prod.workshops.aws/workshops/405b34d1-cbd7-4de7-9f29-5f05f977c036/en-US,,question-answering,RAG,fine-tuning,,,,,,,,workshop,2023
+Automatically generate impressions from findings in radiology reports using generative AI on AWS,https://aws.amazon.com/blogs/machine-learning/automatically-generate-impressions-from-findings-in-radiology-reports-using-generative-ai-on-aws/,https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2023/08/21/14850003.png,summarization-paraphrasing,,,,,,,,,,blog,08/30/2023

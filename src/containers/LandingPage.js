@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { useSearchParams  } from 'react-router-dom';
+
 import Cards from "@cloudscape-design/components/cards";
 import Box from "@cloudscape-design/components/box";
 import Header from "@cloudscape-design/components/header";
@@ -13,7 +15,7 @@ import {
 
 import Navigation from "../components/Navigation";
 import { appLayoutLabels} from '../components/Labels';
-import { aggregateUseCases, getNumberOfVisibleItems, getTextFilterCounterText, includesUseCase, mapContentTypeName, mapResourceFields, paginationAriaLabels, prepareContentTypesOptions, prepareUseCasesOptions } from '../components/utils'
+import { aggregateUseCases, getContentTypeFromQueryParamIfExists, getNumberOfVisibleItems, getTextFilterCounterText, getUseCaseFromQueryParamIfExists, includesUseCase, mapContentTypeName, mapResourceFields, paginationAriaLabels, prepareContentTypesOptions, prepareUseCasesOptions } from '../components/utils'
 import { CardsEmptyState, CardsNoMatchState } from '../components/Cards';
 import { SEARCHABLE_COLUMNS_CARDS, cardsVisibleContent, cardsVisiblePreferencesOptions } from '../components/constants';
 
@@ -23,8 +25,8 @@ const csvFile = process.env.PUBLIC_URL + '/atlas.csv'
 const rectangle = process.env.PUBLIC_URL + '/rectangle_grey.png'
 const repoImage = process.env.PUBLIC_URL + '/image.png'
 
-const defaultUseCase = { value: '0', label: 'Any use case' };
-const defaultContentType = { value: '0', label: 'Any content type' };
+const defaultUseCase = { value: '0', label: 'Any use case', rawLabel: 'default' };
+const defaultContentType = { value: '0', label: 'Any content type', rawLabel: 'default' };
 
 const selectUseCaseOptions = prepareUseCasesOptions(defaultUseCase);
 const selectContentTypesOptions = prepareContentTypesOptions(defaultContentType);
@@ -38,6 +40,8 @@ function matchesContentType(item, selectedContentType) {
 }
 
 const CardsContent = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const [ loading, setLoading ] = React.useState(false);
     const [ selectedItems, setSelectedItems ] = React.useState([{ }]);
     const [ preferences, setPreferences ] = React.useState({ pageSize: 12, visibleContent: cardsVisibleContent })
@@ -81,6 +85,25 @@ const CardsContent = () => {
       }
 
       fetchData().catch(console.error);
+
+      const searchUseCaseValue = searchParams.get('use-case');
+      const useCaseToSelect = getUseCaseFromQueryParamIfExists(searchUseCaseValue, defaultUseCase)
+      setUseCase(useCaseToSelect)
+      
+      const searchContentTypeValue = searchParams.get('content-type');
+      const contentTypeToSelect = getContentTypeFromQueryParamIfExists(searchContentTypeValue, defaultContentType)
+      setContentType(contentTypeToSelect)
+
+      const searchText = searchParams.get('text')
+      if(searchText){ actions.setFiltering(searchText) }
+
+      const refinedQuery = {
+        ...(searchUseCaseValue ? {useCaseQuery: useCaseToSelect?.rawLabel}: {}),
+        ...(searchContentTypeValue ? {contentTypeQuery: contentTypeToSelect?.rawLabel}: {}),
+        textFilter: searchText
+      }
+      addQueryParams(refinedQuery)
+
     }, [])
 
     const { items, actions, filteredItemsCount, filterProps, paginationProps } = useCollection(
@@ -93,11 +116,12 @@ const CardsContent = () => {
               if (!matchesUseCase(item, useCase)) {
                 return false;
               }
+
               if (!matchesContentType(item, contentType)) {
                 return false;
               }
+
               const filteringTextLowerCase = filteringText.toLowerCase();
-      
               return SEARCHABLE_COLUMNS_CARDS.map(key => item[key]).some(
                 value => typeof value === 'string' && value.toLowerCase().indexOf(filteringTextLowerCase) > -1
               );
@@ -108,13 +132,28 @@ const CardsContent = () => {
         }
       );
 
-      function clearFilter() {
-        actions.setFiltering('');
-        setUseCase(defaultUseCase);
-        setContentType(defaultContentType);
+    function clearFilter() {
+      actions.setFiltering('');
+      setUseCase(defaultUseCase);
+      setContentType(defaultContentType);
+    }
+
+    const addQueryParams = (query) => {
+      const { textFilter, useCaseQuery, contentTypeQuery } = query
+      const useCaseParam = useCaseQuery || useCase?.rawLabel
+      const contentTypeParam = contentTypeQuery || contentType?.rawLabel
+      const textParam = textFilter || filterProps.filteringText
+
+      const queryParams = {
+        ...(textParam ? { "text": textParam } : {} ),
+        ...(useCaseParam !== defaultUseCase.rawLabel ? { "use-case": useCaseParam } : {} ),
+        ...(contentTypeParam !== defaultContentType.rawLabel ? { "content-type": contentTypeParam } : {} )
       }
 
-      return (
+      setSearchParams(queryParams)
+    }
+
+    return (
         <Cards
           onSelectionChange={({ detail }) =>
             setSelectedItems(detail.selectedItems)
@@ -191,7 +230,10 @@ const CardsContent = () => {
                     type="search"
                     value={filterProps.filteringText}
                     onChange={event => {
-                      actions.setFiltering(event.detail.value);
+                      const textFilter = event.detail.value
+                      actions.setFiltering(textFilter);
+
+                      addQueryParams({ textFilter })
                     }}
                     placeholder="Enter a keyword"
                     clearAriaLabel="clear"
@@ -209,7 +251,12 @@ const CardsContent = () => {
                       selectedAriaLabel="Selected"
                       selectedOption={useCase}
                       onChange={event => {
-                        setUseCase(event.detail.selectedOption);
+                        const selectedUseCase = event.detail.selectedOption
+                        setUseCase(selectedUseCase);
+
+                        const useCaseQuery = selectedUseCase?.rawLabel
+                        addQueryParams({ useCaseQuery })
+
                       }}
                       ariaDescribedby={null}
                       expandToViewport={true}
@@ -224,7 +271,12 @@ const CardsContent = () => {
                       selectedAriaLabel="Selected"
                       selectedOption={contentType}
                       onChange={event => {
-                        setContentType(event.detail.selectedOption);
+                        const selectedContentType = event.detail.selectedOption
+                        setContentType(selectedContentType);
+
+                        const contentTypeQuery = selectedContentType?.rawLabel
+                        addQueryParams({ contentTypeQuery }) 
+                        
                       }}
                       ariaDescribedby={null}
                       expandToViewport={true}
