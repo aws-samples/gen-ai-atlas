@@ -9,7 +9,7 @@ import CollectionPreferences from "@cloudscape-design/components/collection-pref
 import Link from "@cloudscape-design/components/link";
 import { useCollection } from '@cloudscape-design/collection-hooks';
 import {
-    AppLayout, ColumnLayout, ContentLayout, FormField, Input, Select, SpaceBetween,
+    AppLayout, ColumnLayout, ContentLayout, FormField, Input, Multiselect, Select, SpaceBetween,
 } from "@cloudscape-design/components";
 
 
@@ -28,11 +28,11 @@ const repoImage = process.env.PUBLIC_URL + '/image.png'
 const defaultUseCase = { value: '0', label: 'Any use case', rawLabel: 'default' };
 const defaultContentType = { value: '0', label: 'Any content type', rawLabel: 'default' };
 
-const selectUseCaseOptions = prepareUseCasesOptions(defaultUseCase);
+const selectUseCaseOptions = prepareUseCasesOptions();
 const selectContentTypesOptions = prepareContentTypesOptions(defaultContentType);
 
 function matchesUseCase(item, selectedUseCase) {
-  return selectedUseCase === defaultUseCase || includesUseCase(item.useCases, selectedUseCase)
+  return includesUseCase(item.useCases, selectedUseCase)
 }
 
 function matchesContentType(item, selectedContentType) {
@@ -46,7 +46,7 @@ const CardsContent = () => {
     const [ selectedItems, setSelectedItems ] = React.useState([{ }]);
     const [ preferences, setPreferences ] = React.useState({ pageSize: 12, visibleContent: cardsVisibleContent })
     const [ resources, setResources ] = React.useState([])
-    const [ useCase, setUseCase ] = React.useState(defaultUseCase);
+    const [ useCases, setUseCases ] = React.useState([]);
     const [ contentType, setContentType ] = React.useState(defaultContentType);
 
     useEffect(() => {
@@ -87,8 +87,8 @@ const CardsContent = () => {
       fetchData().catch(console.error);
 
       const searchUseCaseValue = searchParams.get('use-case');
-      const useCaseToSelect = getUseCaseFromQueryParamIfExists(searchUseCaseValue, defaultUseCase)
-      setUseCase(useCaseToSelect)
+      const useCasesToSelect = getUseCaseFromQueryParamIfExists(searchUseCaseValue)
+      setUseCases(useCasesToSelect)
       
       const searchContentTypeValue = searchParams.get('content-type');
       const contentTypeToSelect = getContentTypeFromQueryParamIfExists(searchContentTypeValue, defaultContentType)
@@ -98,7 +98,7 @@ const CardsContent = () => {
       if(searchText){ actions.setFiltering(searchText) }
 
       const refinedQuery = {
-        ...(searchUseCaseValue ? {useCaseQuery: useCaseToSelect?.rawLabel}: {}),
+        ...(searchUseCaseValue ? {useCaseQuery: useCasesToSelect?.map(c => c?.rawLabel)}: {}),
         ...(searchContentTypeValue ? {contentTypeQuery: contentTypeToSelect?.rawLabel}: {}),
         textFilter: searchText
       }
@@ -113,7 +113,7 @@ const CardsContent = () => {
             empty: <CardsEmptyState />,
             noMatch: <CardsNoMatchState onClearFilter={clearFilter} />,
             filteringFunction: (item, filteringText) => {
-              if (!matchesUseCase(item, useCase)) {
+              if (!matchesUseCase(item, useCases)) {
                 return false;
               }
 
@@ -134,19 +134,19 @@ const CardsContent = () => {
 
     function clearFilter() {
       actions.setFiltering('');
-      setUseCase(defaultUseCase);
+      setUseCases([]);
       setContentType(defaultContentType);
     }
 
     const addQueryParams = (query) => {
       const { textFilter, useCaseQuery, contentTypeQuery } = query
-      const useCaseParam = useCaseQuery || useCase?.rawLabel
+      const useCaseParam = (useCaseQuery || useCases?.map(c => c.rawLabel) || []).join()
       const contentTypeParam = contentTypeQuery || contentType?.rawLabel
-      const textParam = textFilter || filterProps.filteringText
+      const textParam = textFilter ?? filterProps.filteringText
 
       const queryParams = {
         ...(textParam ? { "text": textParam } : {} ),
-        ...(useCaseParam !== defaultUseCase.rawLabel ? { "use-case": useCaseParam } : {} ),
+        ...(useCaseParam?.length > 0 ? { "use-case": useCaseParam } : {} ),
         ...(contentTypeParam !== defaultContentType.rawLabel ? { "content-type": contentTypeParam } : {} )
       }
 
@@ -245,19 +245,20 @@ const CardsContent = () => {
               <ColumnLayout columns={2}>
                 <div className="select-filter">
                   <FormField label="Filter by use case">
-                    <Select
+                    <Multiselect
                       data-testid="use-case-filter"
                       options={selectUseCaseOptions}
                       selectedAriaLabel="Selected"
-                      selectedOption={useCase}
+                      selectedOptions={useCases}
                       onChange={event => {
-                        const selectedUseCase = event.detail.selectedOption
-                        setUseCase(selectedUseCase);
+                        const selectedUseCases = event.detail.selectedOptions
+                        setUseCases(selectedUseCases);
 
-                        const useCaseQuery = selectedUseCase?.rawLabel
+                        const useCaseQuery = selectedUseCases?.map(c => c?.rawLabel)
                         addQueryParams({ useCaseQuery })
 
                       }}
+                      placeholder={defaultUseCase.label}
                       ariaDescribedby={null}
                       expandToViewport={true}
                     />
@@ -285,7 +286,7 @@ const CardsContent = () => {
                 </div>
               </ColumnLayout>
               <div aria-live="polite">
-                {(filterProps.filteringText || contentType !== defaultContentType || useCase !== defaultUseCase) && (
+                {(filterProps.filteringText || contentType !== defaultContentType || useCases?.length !== 0) && (
                   <span className="filtering-results">{getTextFilterCounterText(filteredItemsCount)}</span>
                 )}
               </div>
