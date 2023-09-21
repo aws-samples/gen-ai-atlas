@@ -82,11 +82,21 @@ export const mapResourceFields = async (resource) => {
   }
 }
 
-export const prepareUseCasesOptions = (defaultUseCase) => [defaultUseCase, ...useCasesOptions.map(option => ({ ...option, rawLabel: option.label, label: mapUseCaseName(option.label)}))]
+export const prepareUseCasesOptions = () => [...useCasesOptions.map(option => ({ ...option, rawLabel: option.label, label: mapUseCaseName(option.label)}))]
 
 export const prepareContentTypesOptions = (defaultContentType) => [defaultContentType, ...contentTypesOptions.map(option => ({...option, rawLabel: option.label, label: mapContentTypeName(option.label)}))]
 
-export const includesUseCase = (useCases, selectedUseCase) => useCases?.includes(selectedUseCase.rawLabel) || false
+export const includesUseCase = (useCases, selectedUseCases) => {
+  // if no use cases have been selected, return true
+  let match = selectedUseCases?.length === 0 || false
+  selectedUseCases.filter(selectedUseCase => selectedUseCase?.rawLabel != null).forEach(selectedUseCase => {
+    if(useCases?.includes(selectedUseCase?.rawLabel)){ 
+      match = true 
+      return
+    }
+  })
+  return match
+}
 
 export const getTextFilterCounterText = (count) => `${count} ${count === 1 ? 'match' : 'matches'}`
 
@@ -102,9 +112,10 @@ export const getNumberOfVisibleItems = (filteredItemsCount, currentPage, totalPa
   : `(${totalResources})`
 }
 
-export const getUseCaseFromQueryParamIfExists = (param, defaultUseCase) => {
-  const selectUseCaseOptions = prepareUseCasesOptions(defaultUseCase)
-  return selectUseCaseOptions.filter(option => option.rawLabel === param)?.[0] || defaultUseCase
+export const getUseCaseFromQueryParamIfExists = (param) => {
+  const array = JSON.parse(JSON.stringify("[" + (param || '') + "]"))
+  const selectUseCaseOptions = prepareUseCasesOptions()
+  return selectUseCaseOptions.filter(option => array?.includes(option.rawLabel)) || []
 }
 
 export const getContentTypeFromQueryParamIfExists = (param, defaultContentType) => {
