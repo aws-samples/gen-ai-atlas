@@ -2,60 +2,23 @@
   "name": "gen-ai-atlas",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@cloudscape-design/components": "^3.0.339",
-    "papaparse": "^5.4.1",
-    "react-dom": "^18.2.0",
-    "react-image-size": "^2.0.2",
-    "react-router-dom": "^6.14.2",
-    "react-scripts": "^5.0.1",
-    "web-vitals": "latest"
-  },
-  "overrides": {
-    "@cloudscape-design/components": {
-      "react": "~18.2.0"
-    },
-    "react-scripts": {
-      "stable": "latest",
-      "rollup-plugin-terser": "latest",
-      "w3c-hr-time": "latest",
-      "sourcemap-codec": "latest",
-      "workbox-cacheable-response": "latest",
-      "svgo": "latest",
-      "ejs": "latest"
-    },
-    "web-vitals": {
-      "stable": "latest",
-      "rollup-plugin-terser": "latest",
-      "w3c-hr-time": "latest",
-      "sourcemap-codec": "latest",
-      "workbox-cacheable-response": "latest",
-      "svgo": "latest",
-      "ejs": "latest"
-    }
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "dependencies": {
+    "@cloudscape-design/components": "^3.0.665",
+    "next": "14.2.4",
+    "papaparse": "^5.4.1",
+    "react": "^18",
+    "react-dom": "^18.3.1",
+    "react-image-size": "^2.4.0",
+    "react-router-dom": "^6.23.1"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "14.2.4"
   }
 }

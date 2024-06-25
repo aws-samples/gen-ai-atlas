@@ -132,3 +132,22 @@ dist
 # Mac
 .env
 .DS_Store
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+*.pem
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+next-env.d.ts

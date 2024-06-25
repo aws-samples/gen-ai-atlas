@@ -1,0 +1,22 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - nvm install v20.12.0
+        - nvm use v20.12.0
+        - npm ci --cache .npm --prefer-offline
+    build:
+      commands:
+        - nvm install v20.12.0
+        - nvm use v20.12.0
+        - npm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .next/cache/**/*
+      - .npm/**/*
+      - node_modules/**/*
