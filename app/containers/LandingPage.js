@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect } from 'react';
 import { useSearchParams  } from 'react-router-dom';
 
@@ -21,9 +23,9 @@ import { SEARCHABLE_COLUMNS_CARDS, cardsVisibleContent, cardsVisiblePreferencesO
 
 import Papa from "papaparse";
 import { HomeBreadcrumbs } from '../components/Breadcrumbs';
-const csvFile = process.env.PUBLIC_URL + '/atlas.csv'
-const rectangle = process.env.PUBLIC_URL + '/rectangle_grey.png'
-const repoImage = process.env.PUBLIC_URL + '/image.png'
+const csvFile = '/atlas.csv'
+const rectangle = '/rectangle_grey.png'
+const repoImage = '/image.png'
 
 const defaultUseCase = { value: '0', label: 'Any use case', rawLabel: 'default' };
 const defaultContentType = { value: '0', label: 'Any content type', rawLabel: 'default' };

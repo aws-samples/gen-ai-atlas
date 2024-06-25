@@ -3,7 +3,6 @@ The "Generative AI Atlas" project includes the following third-party software/li
 
 ** @cloudscape-design/components - https://github.com/cloudscape-design/components
 ** aws-amplify - https://github.com/aws-amplify
-** web-vitals - https://github.com/GoogleChrome/web-vitals
 
 
                                  Apache License
@@ -184,15 +183,12 @@ The "Generative AI Atlas" project includes the following third-party software/li
 
 ----------------
 
-
-** @testing-library/jest-dom - https://github.com/testing-library/jest-dom
-** @testing-library/react - https://github.com/testing-library/react-testing-library
 ** papaparse - https://github.com/mholt/PapaParse
 ** react - https://github.com/facebook/react
-** react-dom - https://github.com/facebook/react
 ** react-image-size - https://github.com/andreyk1512/react-image-size
 ** react-router-dom - https://github.com/remix-run/react-router
-** react-scripts - https://github.com/facebook/create-react-app
+** react-dom - https://github.com/facebook/react
+** next - https://github.com/vercel/next.js
 
 
 The MIT License (MIT)
