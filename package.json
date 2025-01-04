@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@cloudscape-design/components": "^3.0.665",
-    "next": "14.2.15",
+    "next": "14.2.21",
     "papaparse": "^5.4.1",
     "react": "^18",
     "react-dom": "^18.3.1",
